@@ -28,16 +28,18 @@ export const ChessBoard: React.FC<ChessBoardProps> = ({ className }) => {
   return (
     <div className={className}>
       <Chessboard
-        position={position.fen}
-        onPieceDrop={handleMove}
-        boardWidth={400}
-        arePiecesDraggable={true}
-        customBoardStyle={{
-          borderRadius: '8px',
-          boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
-        }}
-        customDarkSquareStyle={{ backgroundColor: '#779952' }}
-        customLightSquareStyle={{ backgroundColor: '#edeed1' }}
+        {...{
+          position: position.fen,
+          onPieceDrop: handleMove,
+          boardWidth: 400,
+          arePiecesDraggable: true,
+          customBoardStyle: {
+            borderRadius: '8px',
+            boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
+          },
+          customDarkSquareStyle: { backgroundColor: '#779952' },
+          customLightSquareStyle: { backgroundColor: '#edeed1' },
+        } as any}
       />
     </div>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChessBoard } from '@/components/chess/ChessBoard';
 import { MoveHistory } from '@/components/chess/MoveHistory';
 import { AnalysisPanel } from '@/components/chess/AnalysisPanel';

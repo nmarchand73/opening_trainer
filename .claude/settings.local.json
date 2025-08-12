@@ -8,7 +8,12 @@
       "Bash(python -m pip install:*)",
       "Bash(python3 -m pip install:*)",
       "Bash(python3:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "Bash(npm run preview:*)",
+      "Bash(curl:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
