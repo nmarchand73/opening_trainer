@@ -1,43 +1,32 @@
-import requests
-import json
+import ollama
 from typing import Optional, Dict, Any
 from app.core.config import settings
 
 class OllamaService:
     def __init__(self):
-        self.base_url = settings.ollama_url
+        self.client = ollama.Client(host=settings.ollama_url)
         self.model = settings.ollama_model
     
     async def generate_response(self, prompt: str, context: Optional[str] = None) -> str:
-        """Generate a response using Ollama API"""
+        """Generate a response using Ollama Python library"""
         try:
             full_prompt = self._build_chess_prompt(prompt, context)
             
-            payload = {
-                "model": self.model,
-                "prompt": full_prompt,
-                "stream": False,
-                "options": {
-                    "temperature": 0.7,
-                    "top_p": 0.9,
-                    "max_tokens": 500
+            response = self.client.generate(
+                model=self.model,
+                prompt=full_prompt,
+                stream=False,
+                options={
+                    'temperature': 0.7,
+                    'top_p': 0.9,
+                    'num_predict': 500
                 }
-            }
-            
-            response = requests.post(
-                f"{self.base_url}/api/generate",
-                json=payload,
-                timeout=30
             )
             
-            if response.status_code == 200:
-                result = response.json()
-                return result.get("response", "Sorry, I couldn't generate a response.")
-            else:
-                return "Sorry, the AI assistant is currently unavailable."
+            return response.get('response', "Sorry, I couldn't generate a response.")
                 
-        except requests.exceptions.RequestException:
-            return "Sorry, I'm having trouble connecting to the AI assistant."
+        except ollama.ResponseError as e:
+            return f"Ollama error: {str(e)}"
         except Exception as e:
             return f"An error occurred: {str(e)}"
     
@@ -77,7 +66,7 @@ Keep your responses concise but informative, suitable for intermediate chess pla
     def is_available(self) -> bool:
         """Check if Ollama service is available"""
         try:
-            response = requests.get(f"{self.base_url}/api/tags", timeout=5)
-            return response.status_code == 200
+            self.client.list()
+            return True
         except:
             return False
